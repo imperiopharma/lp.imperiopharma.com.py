@@ -1,0 +1,64 @@
+/* assets/css/design-system.css */
+:root {
+  /* Paleta de cores principal */
+  --color-primary: #0d6efd;
+  --color-primary-light: #5698ff;
+  --color-primary-dark: #0053a6;
+  --color-secondary: #6c757d;
+  --color-success: #20c997;
+  --color-info: #0dcaf0;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-light: #f8f9fa;
+  --color-dark: #212529;
+  
+  /* Cores para neomorfismo */
+  --surface-color: #f0f4f8;
+  --element-color: #f8fafc;
+  --shadow-light: rgba(255, 255, 255, 0.9);
+  --shadow-dark: rgba(0, 0, 0, 0.1);
+  
+  /* Cores para glassmorfismo */
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: rgba(0, 0, 0, 0.05);
+  --glass-blur: 12px;
+  
+  /* Espaçamentos */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  
+  /* Bordas e arredondamentos */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 50%;
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 4px var(--shadow-dark);
+  --shadow-md: 0 4px 8px var(--shadow-dark);
+  --shadow-lg: 0 8px 16px var(--shadow-dark);
+  
+  /* Tipografia */
+  --font-family: 'Poppins', 'Segoe UI', sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  
+  /* Transições */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Elevações (z-index) */
+  --z-base: 1;
+  --z-above: 10;
+  --z-dropdown: 100;
+  --z-modal: 1000;
+  --z-toast: 5000;
+}

@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Império Pharma Store</title>
+
+  <!-- FONTES: Montserrat + Poppins (substituindo Roboto para um look mais premium) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ICONES FONT AWESOME (CDN 6.x) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <!-- Manifest (PWA) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0055a4">
+
+  <!-- FORÇAR NAVEGADOR A NÃO USAR CACHE (NO-CACHE) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- CSS PRINCIPAL (style.css) COM VERSÃO -->
+  <link rel="stylesheet" href="style.css?v=5">
+
+  <!-- BIBLIOTECA PARA MÁSCARAS (IMask) -->
+  <script src="https://unpkg.com/imask"></script>
+
+  <!-- BIBLIOTECA DE ANIMAÇÕES -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body>
+  <!-- LOADER INICIAL -->
+  <div id="initialLoader" class="loader-container">
+    <div class="loader">
+      <svg viewBox="0 0 80 80">
+        <circle id="loader-circle" cx="40" cy="40" r="32"></circle>
+      </svg>
+      <img src="https://i.postimg.cc/ZKP8qkYv/logo-branca-50px.png" alt="Império Pharma" class="loader-logo">
+    </div>
+  </div>
+
+  <!-- MODAL DE BOAS-VINDAS -->
+  <div id="modalBoasVindas" class="modal-boas-vindas hidden">
+    <div class="modal-content-boas-vindas">
+      <div class="modal-header">
+        <img src="https://i.postimg.cc/ZKP8qkYv/logo-branca-50px.png" alt="Império Pharma Logo" class="welcome-logo">
+        <h2 class="titulo-modal">Bem-vindo(a) à Império Pharma!</h2>
+      </div>
+      <p class="texto-modal">
+        Aqui você encontra produtos premium, com estoque diversificado e entrega garantida.
+        <br>Fique à vontade para explorar nossas marcas!
+      </p>
+    <button id="btnFecharBoasVindas" class="btn-modal-boas-vindas" aria-label="Fechar mensagem de boas-vindas">
+  <i class="fa-solid fa-check"></i> Continuar
+</button>
+    </div>
+  </div>
+
+<!-- BARRA SUPERIOR (HEADER) -->
+<header class="header-bar">
+  <div class="header-inner">
+    <!-- MENU HAMBURGER (VISÍVEL APENAS EM DISPOSITIVOS MÓVEIS) -->
+    <button class="mobile-menu-button" onclick="abrirMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    
+    <!-- LOGO -->
+    <div class="header-logo">
+      <a href="#" onclick="mostrarSecao('paginaInicial'); return false;">
+        <img src="https://i.postimg.cc/ZKP8qkYv/logo-branca-50px.png" alt="Império Pharma" class="logo-imperio">
+        <span class="logo-text">Império Pharma</span>
+      </a>
+    </div>
+
+    <!-- BUSCA -->
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+        <button class="search-clear" id="clearSearch">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <div class="header-actions">
+      <!-- CARRINHO -->
+      <a href="#" class="header-action-button" onclick="verificarCarrinho(); return false;">
+        <div class="action-icon-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span id="headerCartCount" class="header-cart-count">0</span>
+        </div>
+        <span class="action-text">Carrinho</span>
+      </a>
+      
+      <!-- PERFIL/LOGIN -->
+      <div id="userArea" class="header-user-area">
+        <!-- Será preenchido via JavaScript -->
+      </div>
+    </div>
+  </div>
+</header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+    <!-- PROGRESSO DO CHECKOUT -->
+    <div class="checkout-progress" id="checkoutProgressBar">
+      <div class="progress-step" id="progressStep1">
+        <div class="step-circle">1</div>
+        <div class="step-line"></div>
+        <div class="step-label">Carrinho</div>
+      </div>
+      <div class="progress-step" id="progressStep2">
+        <div class="step-circle">2</div>
+        <div class="step-line"></div>
+        <div class="step-label">Dados</div>
+      </div>
+      <div class="progress-step" id="progressStep3">
+        <div class="step-circle">3</div>
+        <div class="step-line"></div>
+        <div class="step-label">Resumo</div>
+      </div>
+      <div class="progress-step" id="progressStep4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Pagamento</div>
+      </div>
+    </div>
+
+    <!-- PÁGINA INICIAL -->
+    <section id="paginaInicial" class="pagina-inicial">
+      <!-- Banner principal (Carrossel) -->
+      <div class="banner-container">
+        <div class="banner-slide" id="bannerSlide">
+          <img src="imgs/banner/1.webp" alt="Banner 1" class="banner-image active">
+          <img src="imgs/banner/2.webp" alt="Banner 2" class="banner-image">
+        </div>
+        <div class="banner-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+
+<!-- SEÇÃO DE DESTAQUES DE MARKETING -->
+<section class="marketing-highlights">
+  <div class="highlights-container">
+    <!-- Card 1: Emagrecedores -->
+    <a href="#" class="highlight-card" onclick="filtrarCategoria('Emagrecedores'); return false;">
+      <div class="highlight-icon">
+        <i class="fa-solid fa-weight-scale"></i>
+      </div>
+      <div class="highlight-content">
+        <h3>Emagrecedores</h3>
+        <p>Produtos para auxiliar na perda de peso</p>
+      </div>
+      <div class="highlight-arrow">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+    </a>
+    
+    <!-- Card 2: Farmácia -->
+    <a href="#" class="highlight-card" onclick="filtrarCategoria('Farmacia'); return false;">
+      <div class="highlight-icon pharmacy">
+        <i class="fa-solid fa-pills"></i>
+      </div>
+      <div class="highlight-content">
+        <h3>Farmácia</h3>
+        <p>Medicamentos e suplementos essenciais</p>
+      </div>
+      <div class="highlight-arrow">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+    </a>
+  </div>
+</section>
+
+      <!-- SUB-HEADER (Links: FAQ, Fretes, Ciclos Prontos) -->
+      <section class="sub-header-loja">
+        <div class="sub-header-loja-container">
+          <a href="https://imperiopharma.com.py/#faq" class="sub-header-link-loja">
+            <div class="link-icon-wrapper">
+              <i class="fa-solid fa-question-circle"></i>
+            </div>
+            <span>FAQ</span>
+          </a>
+          <a href="fretes.html" class="sub-header-link-loja">
+            <div class="link-icon-wrapper">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <span>Fretes</span>
+          </a>
+          <a href="https://imperiopharma.com.py/blog/posts.html" class="sub-header-link-loja">
+            <div class="link-icon-wrapper">
+              <i class="fa-solid fa-dumbbell"></i>
+            </div>
+            <span>Ciclos Prontos</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- MARCAS (agrupadas por tipo) -->
+      <div class="brands-section">
+        <div class="section-header">
+          <h2 class="titulo-sessao">Nossas Marcas</h2>
+          <p class="section-description">Selecione uma das marcas abaixo para ver os produtos</p>
+        </div>
+
+        <div class="brands-category">
+          <h3 class="subtitulo-sessao"><span>Marcas Importadas</span></h3>
+          <div id="containerImportadas" class="grupo-marcas"></div>
+        </div>
+
+        <div class="brands-category">
+          <h3 class="subtitulo-sessao"><span>Marcas Premium</span></h3>
+          <div id="containerPremium" class="grupo-marcas"></div>
+        </div>
+
+        <div class="brands-category">
+          <h3 class="subtitulo-sessao"><span>Marcas Nacionais</span></h3>
+          <div id="containerNacionais" class="grupo-marcas"></div>
+        </div>
+
+        <div class="brands-category">
+          <h3 class="subtitulo-sessao"><span>Diversos</span></h3>
+          <div id="containerDiversos" class="grupo-marcas"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO DE SELOS (GARANTIAS & PROTEÇÕES) -->
+      <section class="secao-selos-rodape">
+        <h2>Garantias & Proteções</h2>
+        <div class="selo-container-rodape">
+          <div class="selo-item-rodape">
+            <div class="selo-icon">
+              <i class="fa-solid fa-truck-arrow-right"></i>
+            </div>
+            <p>Envio para todo o Brasil</p>
+          </div>
+          <div class="selo-item-rodape">
+            <div class="selo-icon">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <p>Produtos de Qualidade</p>
+          </div>
+          <div class="selo-item-rodape">
+            <div class="selo-icon">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <p>Dados Pessoais Protegidos</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- PAGINA MARCA (Listagem de produtos em acordiões) -->
+    <section id="paginaMarca" class="pagina-marca hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="mostrarSecao('paginaInicial')">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+      
+      <div id="avisoMarcaFreteSeparado" class="aviso-frete-separado hidden">
+        <i class="fa-solid fa-triangle-exclamation aviso-icon"></i>
+        <p>ATENÇÃO: Esta marca sai de um estoque separado e pode gerar frete adicional.</p>
+      </div>
+      
+      <div class="marca-banner">
+        <img id="bannerMarca" src="" alt="Banner da Marca Selecionada">
+      </div>
+      
+      <h2 id="nomeMarca" class="nome-marca"></h2>
+      
+      <div id="acordioesContainer" class="acordion-container"></div>
+    </section>
+
+    <!-- PAGINA CARRINHO -->
+    <section id="paginaCarrinho" class="pagina-carrinho hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="mostrarSecao('paginaInicial')">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="cart-header">
+        <h2 class="titulo-sessao">Carrinho de Compras</h2>
+        <p class="sub-texto">
+          Revise seus produtos, ajuste quantidades, aplique cupom de desconto,
+          e clique em <strong>Confirmar Carrinho</strong> para prosseguir.
+        </p>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="cart-footer">
+        <div class="cupom-container">
+          <div class="cupom-input-group">
+            <i class="fa-solid fa-tag cupom-icon"></i>
+            <input type="text" id="cupomInput" placeholder="Digite seu cupom de desconto">
+            <button id="aplicarCupomBtn" class="btn-cupom">Aplicar</button>
+          </div>
+        </div>
+        
+        <div class="resumo-valores">
+          <div class="resumo-item" id="subtotalInfo">
+            <span class="resumo-label">Subtotal:</span>
+            <span class="resumo-valor">R$ <span id="subtotalValor">0,00</span></span>
+          </div>
+          
+          <div class="resumo-item hidden" id="descontoInfo">
+            <span class="resumo-label">Desconto:</span>
+            <span class="resumo-valor desconto">R$ <span id="descontoValor">0,00</span></span>
+          </div>
+          
+          <div class="resumo-item total">
+            <span class="resumo-label">Total:</span>
+            <span class="resumo-valor">R$ <span id="totalValor">0,00</span></span>
+          </div>
+        </div>
+        
+        <button id="confirmarCarrinhoBtn" class="btn-confirmar">
+          <span class="btn-text">Confirmar Carrinho</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGINA CLIENTE E ENVIO -->
+    <section id="paginaClienteEnvio" class="pagina-cliente-envio hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="voltarParaCarrinho()">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2 class="titulo-sessao">Dados do Cliente e Envio</h2>
+        <p class="sub-texto">
+          Preencha com atenção para garantir a entrega correta.<br>
+          <strong>Importante:</strong> insira seu CEP para habilitar o cálculo do frete.
+        </p>
+      </div>
+
+      <form id="formClienteEnvio" class="form-cliente-envio">
+        <div class="form-sections">
+          <!-- SEÇÃO 1: DADOS PESSOAIS -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <i class="fa-solid fa-user section-icon"></i>
+              Dados Pessoais
+            </h3>
+            
+            <div class="form-group">
+              <label for="nomeCliente">Nome completo:</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input type="text" id="nomeCliente" placeholder="Ex: João da Silva" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cpfCliente">CPF:</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-id-card input-icon"></i>
+                <input type="text" id="cpfCliente" placeholder="Ex: 123.456.789-00" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="celCliente">Celular:</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-mobile-screen input-icon"></i>
+                <input type="text" id="celCliente" placeholder="Ex: (11) 99999-8888" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="emailCliente">E-mail:</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-envelope input-icon"></i>
+                <input type="email" id="emailCliente" placeholder="Ex: seuemail@dominio.com" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 2: ENDEREÇO DE ENTREGA -->
+          <div class="form-section">
+            <h3 class="form-section-title">
+              <i class="fa-solid fa-location-dot section-icon"></i>
+              Endereço de Entrega
+            </h3>
+            
+            <div class="form-group">
+              <label for="cepCliente">CEP:</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-map-pin input-icon"></i>
+                <input type="text" id="cepCliente" placeholder="Ex: 01001-000" required onblur="obterEstadoPeloCEP()">
+                <div id="cepLoadingSpinner" class="input-spinner" style="display: none;">
+                  <i class="fa-solid fa-circle-notch fa-spin"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-8">
+                <label for="enderecoCliente">Endereço:</label>
+                <div class="input-icon-wrapper">
+                  <i class="fa-solid fa-road input-icon"></i>
+                  <input type="text" id="enderecoCliente" placeholder="Ex: Rua Exemplo" required>
+                </div>
+              </div>
+
+              <div class="form-group col-4">
+                <label for="numeroCliente">Número:</label>
+                <input type="text" id="numeroCliente" placeholder="Ex: 123" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="complementoCliente">Complemento: <span class="optional">(opcional)</span></label>
+              <input type="text" id="complementoCliente" placeholder="Ex: Apto 22">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-4">
+                <label for="bairroCliente">Bairro:</label>
+                <input type="text" id="bairroCliente" placeholder="Ex: Centro" required>
+              </div>
+
+              <div class="form-group col-5">
+                <label for="cidadeCliente">Cidade:</label>
+                <input type="text" id="cidadeCliente" placeholder="Ex: São Paulo" required>
+              </div>
+
+              <div class="form-group col-3">
+                <label for="estadoCliente">Estado (UF):</label>
+                <input type="text" id="estadoCliente" placeholder="Ex: SP" required>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO FRETE -->
+        <div class="form-section">
+          <h3 class="form-section-title">
+            <i class="fa-solid fa-truck-fast section-icon"></i>
+            Selecione o Frete
+          </h3>
+          
+          <div class="bloco-frete">
+            <p class="frete-instruction">
+              Selecione uma das opções de frete disponíveis para sua região:
+            </p>
+            
+            <div class="frete-selector">
+              <select id="tipoFrete" disabled>
+                <option value="">-- Selecione uma opção de frete --</option>
+                <option value="SEDEX">SEDEX</option>
+                <option value="PAC">PAC</option>
+                <option value="TRANSPORTADORA">Transportadora</option>
+              </select>
+              
+              <div class="valor-frete">
+                Valor do frete: <span class="valor-destaque">R$ <span id="valorFrete">0,00</span></span>
+              </div>
+              
+              <p id="freteFeedback" class="frete-feedback">
+                <i class="fa-solid fa-circle-check"></i>
+                Frete habilitado com sucesso!
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="botoes-prosseguir">
+        <button id="btnAvancarResumo" class="btn-confirmar">
+          <span class="btn-text">Avançar para Resumo</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGINA RESUMO -->
+    <section id="paginaResumo" class="pagina-resumo hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="mostrarSecao('paginaClienteEnvio')">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2 class="titulo-sessao">Resumo do Pedido</h2>
+        <p class="sub-texto">
+          Confira seus dados. Se precisar editar algo, clique em <strong>Editar</strong>.
+          Quando estiver tudo certo, clique em <strong>Ir para Pagamento</strong>.
+        </p>
+      </div>
+
+      <div class="resumo-container">
+        <!-- Dados do cliente -->
+        <div class="resumo-bloco cliente-info">
+          <div class="resumo-header">
+            <h3>
+              <i class="fa-solid fa-user section-icon"></i>
+              Dados do Cliente
+            </h3>
+            <button class="btn-editar" onclick="mostrarSecao('paginaClienteEnvio')">
+              <i class="fa-solid fa-pen"></i> Editar
+            </button>
+          </div>
+          
+          <div class="resumo-content">
+            <div class="resumo-info-grid">
+              <div class="info-item">
+                <span class="info-label">Nome:</span>
+                <span class="info-value" id="resumoNome"></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">CPF:</span>
+                <span class="info-value" id="resumoCPF"></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Celular:</span>
+                <span class="info-value" id="resumoCel"></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">E-mail:</span>
+                <span class="info-value" id="resumoEmail"></span>
+              </div>
+            </div>
+            
+            <div class="info-divider"></div>
+            
+            <div class="resumo-info-grid">
+              <div class="info-item">
+                <span class="info-label">CEP:</span>
+                <span class="info-value" id="resumoCEP"></span>
+              </div>
+              <div class="info-item address-item">
+                <span class="info-label">Endereço:</span>
+                <span class="info-value"><span id="resumoEndereco"></span>, Nº <span id="resumoNumero"></span></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Complemento:</span>
+                <span class="info-value" id="resumoComplemento"></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Bairro:</span>
+                <span class="info-value" id="resumoBairro"></span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Cidade/UF:</span>
+                <span class="info-value"><span id="resumoCidade"></span> - <span id="resumoEstado"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Itens do Carrinho -->
+        <div class="resumo-bloco carrinho-info">
+          <div class="resumo-header">
+            <h3>
+              <i class="fa-solid fa-cart-shopping section-icon"></i>
+              Itens do Carrinho
+            </h3>
+            <button class="btn-editar" onclick="mostrarSecao('paginaCarrinho')">
+              <i class="fa-solid fa-pen"></i> Editar
+            </button>
+          </div>
+          
+          <div class="resumo-content">
+            <div id="resumoItensCarrinho" class="resumo-itens"></div>
+            
+            <!-- Aviso de frete separado, se houver -->
+            <div id="avisoFreteCheckout" class="aviso-frete-separado" style="display:none;">
+              <i class="fa-solid fa-triangle-exclamation aviso-icon"></i>
+              <p>Este pedido inclui produtos de estoque(s) separado(s).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Totais (Desconto, Frete, etc.) -->
+        <div class="resumo-bloco totais-info">
+          <div class="resumo-header">
+            <h3>
+              <i class="fa-solid fa-calculator section-icon"></i>
+              Totais do Pedido
+            </h3>
+          </div>
+          
+          <div class="resumo-content">
+            <div class="resumo-totals-grid">
+              <!-- Desconto -->
+              <div class="total-item hidden" id="resumoDescontoInfo">
+                <span class="total-label">Desconto:</span>
+                <span class="total-value discount">
+                  -R$ <span id="resumoDescontoValor">0,00</span>
+                </span>
+              </div>
+              
+              <!-- Frete -->
+              <div class="total-item">
+                <span class="total-label">Frete:</span>
+                <span class="total-value">
+                  R$ <span id="resumoFreteValor">0,00</span>
+                </span>
+              </div>
+              
+              <!-- Forma de Pagamento -->
+              <div class="total-item">
+                <span class="total-label">Forma de Pagamento:</span>
+                <span class="total-value" id="resumoFormaPagamento"></span>
+              </div>
+              
+              <!-- Acréscimo Cartão (se futuro) -->
+              <div class="total-item">
+                <span class="total-label">Acréscimo Cartão (5%):</span>
+                <span class="total-value">
+                  R$ <span id="resumoAcrescimoCartao">0,00</span>
+                </span>
+              </div>
+              
+              <!-- Total Parcial (sem seguro) -->
+              <div class="total-item subtotal">
+                <span class="total-label">Total Parcial:</span>
+                <span class="total-value">
+                  R$ <span id="resumoTotal">0,00</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEGURO OPCIONAL -->
+        <div class="resumo-bloco destaque-seguro">
+          <div class="resumo-header seguro-header">
+            <h3>
+              <i class="fa-solid fa-shield-halved section-icon"></i>
+              Seguro Opcional (20%)
+            </h3>
+          </div>
+          
+          <div class="resumo-content">
+            <p class="seguro-description">
+              Cobre extravio, roubo e danos durante o transporte. 
+              <strong>É obrigatório filmar a embalagem intacta</strong> antes de abri-la
+              para solicitar esse seguro, se preciso.
+            </p>
+            
+            <label class="checkbox-seguro">
+              <input type="checkbox" id="checkboxSeguro">
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-text">Desejo contratar o seguro (+20% do Total Parcial)</span>
+            </label>
+            
+            <div class="seguro-total" id="blocoValorSeguro">
+              <span class="seguro-label">Valor do Seguro:</span>
+              <span class="seguro-valor">R$ <span id="valorSeguro">0,00</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOTAL FINAL (com ou sem seguro) -->
+        <div class="resumo-bloco total-final-bloco">
+          <div class="total-final-container">
+            <span class="total-final-label">TOTAL FINAL:</span>
+            <span class="total-final-value">R$ <span id="resumoTotalFinal">0,00</span></span>
+          </div>
+        </div>
+
+        <div class="botoes-prosseguir">
+          <button id="btnIrPagamento" class="btn-confirmar">
+            <span class="btn-text">Ir para Pagamento</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGINA PAGAMENTO -->
+    <section id="paginaPagamento" class="pagina-pagamento hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="mostrarSecao('paginaResumo')">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2 class="titulo-sessao">Pagamento</h2>
+      </div>
+
+      <!-- SOMENTE PIX (sessaoPIX) -->
+      <div id="sessaoPIX" class="sessao-pagamento hidden">
+        <div class="pix-container">
+          <div class="pix-header">
+            <img src="imgs/logos/pix-logo.png" alt="Pix" class="logo-pix">
+            <h3>Pagamento via PIX</h3>
+          </div>
+          
+          <div class="pix-value">
+            <span class="pix-label">Valor a pagar:</span>
+            <span class="pix-amount">R$ <span id="valorPix">0,00</span></span>
+          </div>
+          
+          <div class="pix-instructions">
+            <ol>
+              <li>Clique em <strong>Ver Chave Pix</strong> para visualizar</li>
+              <li>Efetue o pagamento e guarde seu comprovante</li>
+              <li>Anexe o comprovante e clique em <strong>Finalizar Pedido</strong></li>
+            </ol>
+          </div>
+          
+          <div class="pix-key-action">
+            <button class="btn-ver-pix" onclick="exibirChavePixOculta()">
+              <i class="fa-solid fa-eye"></i> Ver Chave Pix
+            </button>
+          </div>
+
+          <!-- BLOCO DA CHAVE PIX (inicialmente oculto) -->
+          <div id="blocoChavePix" class="pix-key-container hidden">
+            <h4>Chave Pix Aleatória:</h4>
+            
+            <div id="pixCopiaCola" class="pix-key-value">
+              e28bcc63-7c5a-44e3-8ef3-03d8f71a2e01
+            </div>
+            
+            <div class="pix-key-actions">
+              <button class="btn-copy-pix" onclick="copiarPixCola()">
+                <i class="fa-solid fa-copy"></i> Copiar Chave Pix
+              </button>
+              
+              <button class="btn-hide-pix" onclick="ocultarChavePix()">
+                <i class="fa-solid fa-eye-slash"></i> Ocultar
+              </button>
+            </div>
+          </div>
+
+          <div class="pix-upload">
+            <p class="upload-instruction">
+              Após pagar, anexe o comprovante e clique em <strong>Finalizar Pedido</strong>.
+            </p>
+            
+            <div class="anexar-comprovante">
+              <label for="comprovantePix" class="upload-label">
+                <i class="fa-solid fa-file-upload"></i>
+                <span>Anexar Comprovante</span>
+              </label>
+              
+              <input type="file" id="comprovantePix" accept="image/*,application/pdf" class="upload-input">
+              
+              <div id="comprovantePixPreview" class="preview-arquivo"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkbox de Aceite de Termos -->
+      <div class="terms-container">
+        <label class="checkbox-terms">
+          <input type="checkbox" id="checkTermos" name="checkTermos" checked>
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-text">
+            Eu <strong>li e aceito</strong> os 
+            <a href="termos.html" target="_blank" class="terms-link">
+              termos e condições
+            </a>.
+          </span>
+        </label>
+      </div>
+
+      <div class="botoes-prosseguir">
+        <button id="btnFinalizarPedido" class="btn-finalizar" disabled>
+          <i class="fa-solid fa-check"></i>
+          <span class="btn-text">Finalizar Pedido</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGINA DE AGRADECIMENTO -->
+    <section id="paginaAgradecimento" class="pagina-agradecimento hidden">
+      <div class="agradecimento-container">
+        <div class="success-icon">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        
+        <h2>Pedido Enviado com Sucesso!</h2>
+        
+        <p class="congrats-message">
+          Se você está vendo esta mensagem, está tudo certo com o seu pedido! 
+          <span class="emoji">😊</span>
+        </p>
+        
+        <div class="info-cards">
+          <div class="info-card">
+            <h3>O que aconteceu agora:</h3>
+            <ul>
+              <li>
+                <i class="fa-brands fa-whatsapp info-icon"></i>
+                <span>Você foi direcionado(a) para o nosso WhatsApp com o resumo do pedido.</span>
+              </li>
+              <li>
+                <i class="fa-solid fa-calendar-check info-icon"></i>
+                <span>Agora nossa equipe irá confirmar o pagamento e preparar a entrega.</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="info-card">
+            <h3>O que você precisa fazer:</h3>
+            <ol>
+              <li class="alert-item">
+                <strong><i class="fa-solid fa-triangle-exclamation"></i> Envie o comprovante de pagamento</strong>
+                <span>caso ainda não tenha enviado. Assim confirmamos rápido.</span>
+              </li>
+              <li class="success-item">
+                <strong><i class="fa-solid fa-check-circle"></i> Aguardando confirmação:</strong>
+                <span>Em breve você receberá nossa mensagem de confirmação + código de rastreio.</span>
+              </li>
+            </ol>
+          </div>
+        </div>
+        
+        <p class="help-text">
+          Caso tenha dúvidas, é só falar conosco pelo mesmo WhatsApp. 
+          <span class="emoji">📝</span>
+        </p>
+        
+        <button class="btn-confirmar" onclick="mostrarSecao('paginaInicial')">
+          <i class="fa-solid fa-home"></i>
+          <span class="btn-text">Voltar à Página Inicial</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PAGINA PERFIL -->
+    <section id="paginaPerfil" class="pagina-perfil hidden">
+      <div class="barra-voltar">
+        <button class="btn-voltar" onclick="mostrarSecao('paginaInicial')">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+      </div>
+
+      <div class="section-header">
+        <h2 class="titulo-sessao">Meu Perfil</h2>
+      </div>
+
+      <div id="perfilConteudo" class="perfil-conteudo">
+        <div class="profile-skeleton">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+        </div>
+      </div>
+
+      <div class="perfil-logout-area">
+        <button onclick="fazerLogout()" class="btn-logout">
+          <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+<!-- BARRA INFERIOR (FOOTER) -->
+<footer class="footer-bar">
+  <a href="#" class="footer-button" id="btnMarcas" onclick="mostrarSecao('paginaInicial'); return false;">
+    <div class="footer-icon-container">
+      <i class="fa-solid fa-store"></i>
+    </div>
+    <span>Marcas</span>
+  </a>
+
+  <a href="#" class="footer-button" id="btnFretes" onclick="abrirFretes(); return false;">
+    <div class="footer-icon-container">
+      <i class="fa-solid fa-truck-fast"></i>
+    </div>
+    <span>Fretes</span>
+  </a>
+
+  <a href="#" class="footer-button" id="btnMenuCentral" onclick="abrirMenu(); return false;">
+    <div class="footer-icon-container menu-button">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+    <span>Menu</span>
+  </a>
+
+  <a href="#" class="footer-button" id="btnCarrinho" onclick="verificarCarrinho(); return false;">
+    <div class="footer-icon-container">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <div id="cartCount" class="cart-count">0</div>
+    </div>
+    <span>Carrinho</span>
+  </a>
+
+  <a href="#" class="footer-button" id="btnPerfil" onclick="verificarPerfil(); return false;">
+    <div class="footer-icon-container">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <span>Perfil</span>
+  </a>
+</footer>
+
+  <!-- OVERLAY DO MENU (DRAWER) -->
+  <div id="drawerOverlay" class="drawer-overlay hidden" onclick="fecharMenuPorOverlay()"></div>
+
+  <!-- MENU FUTURISTA (DRAWER) -->
+  <div id="menuDrawer" class="drawer hidden">
+    <!-- BOTÃO FECHAR -->
+    <button class="drawer-close-btn" onclick="fecharMenu()">
+      <i class="fa-solid fa-times"></i>
+    </button>
+
+    <div class="drawer-header">
+      <img src="https://i.postimg.cc/ZKP8qkYv/logo-branca-50px.png" alt="Império Pharma" class="drawer-logo">
+      <h2>Menu</h2>
+    </div>
+
+    <ul class="menu-list">
+      <!-- MARCAS IMPORTADAS -->
+      <li class="menu-category">
+        <div class="menu-item" onclick="toggleSubmenu('importadas')">
+          <i class="fa-solid fa-globe menu-icon"></i>
+          <span>Marcas Importadas</span>
+          <i class="fa-solid fa-chevron-down menu-arrow"></i>
+        </div>
+        <ul id="submenuImportadas" class="submenu hidden"></ul>
+      </li>
+      
+      <!-- MARCAS PREMIUM -->
+      <li class="menu-category">
+        <div class="menu-item" onclick="toggleSubmenu('premium')">
+          <i class="fa-solid fa-crown menu-icon"></i>
+          <span>Marcas Premium</span>
+          <i class="fa-solid fa-chevron-down menu-arrow"></i>
+        </div>
+        <ul id="submenuPremium" class="submenu hidden"></ul>
+      </li>
+      
+      <!-- MARCAS NACIONAIS -->
+      <li class="menu-category">
+        <div class="menu-item" onclick="toggleSubmenu('nacionais')">
+          <i class="fa-solid fa-flag menu-icon"></i>
+          <span>Marcas Nacionais</span>
+          <i class="fa-solid fa-chevron-down menu-arrow"></i>
+        </div>
+        <ul id="submenuNacionais" class="submenu hidden"></ul>
+      </li>
+      
+      <!-- DIVERSOS -->
+      <li class="menu-category">
+        <div class="menu-item" onclick="toggleSubmenu('diversos')">
+          <i class="fa-solid fa-box-open menu-icon"></i>
+          <span>Diversos</span>
+          <i class="fa-solid fa-chevron-down menu-arrow"></i>
+        </div>
+        <ul id="submenuDiversos" class="submenu hidden">
+          <li>
+            <a href="#" onclick="abrirFarmarcia(); return false;">
+              <i class="fa-solid fa-pills submenu-icon"></i>
+              <span>Farmácia</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="abrirCBD(); return false;">
+              <i class="fa-solid fa-cannabis submenu-icon"></i>
+              <span>CBD</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      
+      <!-- LINKS FIXOS -->
+      <li class="menu-category fixed-links">
+        <a href="#" onclick="abrirFretes(); return false;" class="menu-item">
+          <i class="fa-solid fa-truck-fast menu-icon"></i>
+          <span>Fretes</span>
+        </a>
+      </li>
+      <li class="menu-category fixed-links">
+        <a href="#" onclick="abrirFAQ(); return false;" class="menu-item">
+          <i class="fa-solid fa-question-circle menu-icon"></i>
+          <span>FAQ</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- MODAL CARRINHO -->
+  <div id="modalCarrinho" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header cart-modal-header">
+        <h3 id="modalTitulo" class="modal-title">Produto adicionado!</h3>
+        <button class="modal-close" id="btnCloseCartModal">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Miniatura do produto -->
+      <div id="modalCartImage" class="modal-cart-image"></div>
+
+      <p id="modalMensagem" class="modal-message">
+        Produto XYZ adicionado ao carrinho!
+      </p>
+
+      <!-- Subtotal atualizado -->
+      <p id="modalCartSubtotal" class="modal-cart-subtotal">
+        Total do Carrinho: <span>R$ 0,00</span>
+      </p>
+
+    <div class="modal-buttons">
+  <button id="btnContinuar" class="btn-modal-continue btn-acao-secundaria">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Continuar Comprando</span>
+  </button>
+  <button id="btnIrCarrinho" class="btn-modal-carrinho btn-acao-primaria">
+    <i class="fa-solid fa-cart-arrow-down"></i>
+    <span>Ir para o Carrinho</span>
+  </button>
+</div>
+    </div>
+  </div>
+
+  <!-- MODAL ZOOM (produtos) -->
+  <div id="modalProdutoZoom" class="modal hidden" onclick="fecharProdutoZoom(event)">
+    <div class="modal-content-zoom">
+      <span id="btnCloseProdutoZoom" class="btn-close-zoom">
+        <i class="fa-solid fa-times"></i>
+      </span>
+      <img id="zoomProdutoImage" src="" alt="Imagem Zoom" class="imagem-zoom">
+    </div>
+  </div>
+
+  <!-- MODAL COMBO -->
+  <div id="modalCombo" class="modal hidden">
+    <div class="modal-content combo-modal">
+      <div class="modal-header">
+        <h3>Monte seu Combo</h3>
+        <button class="modal-close" onclick="fecharModalCombo()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      
+      <p class="combo-description">
+        Selecione os itens que farão parte do combo e clique em <strong>Confirmar</strong>.
+      </p>
+      
+      <div id="comboItemsContainer" class="combo-items-container"></div>
+      
+      <div class="modal-buttons">
+        <button id="btnConfirmarCombo" class="btn-modal-carrinho">
+          <i class="fa-solid fa-check"></i> Confirmar
+        </button>
+        <button type="button" class="btn-modal-continue" onclick="fecharModalCombo()">
+          <i class="fa-solid fa-times"></i> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container de TOAST p/ feedbacks rápidos -->
+  <div id="toastContainer" class="toast-container"></div>
+
+
+
+  <!-- Botão Voltar ao topo -->
+  <button id="backToTop" class="back-to-top">
+    <i class="fa-solid fa-chevron-up"></i>
+  </button>
+
+  <!-- SCRIPT PRINCIPAL COM VERSÃO -->
+  <script src="script.js?v=7"></script>
+</body>
+</html>

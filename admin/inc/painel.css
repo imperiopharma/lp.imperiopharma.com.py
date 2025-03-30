@@ -1,0 +1,359 @@
+/***************************************************************
+ * painel.css (ATUALIZADO PARA MOBILE)
+ *
+ * - Variáveis e Reset
+ * - Estrutura: Header, Nav, Container, Footer
+ * - Cartões (cards) e Seções
+ * - Tabelas Responsivas
+ * - Formulários e Botões
+ * - Alertas
+ * - Media Queries (responsividade forte em 768px e 480px)
+ ***************************************************************/
+
+/*-------------------------------------------------------------
+  1) VARIÁVEIS, RESET
+--------------------------------------------------------------*/
+:root {
+  --cor-header: #333;
+  --cor-menu: #444;
+  --cor-fundo: #f7f7f7;
+  --cor-branco: #fff;
+  --cor-texto: #333;
+
+  /* Paleta de ações */
+  --cor-primaria: #007bff;
+  --cor-primaria-hover: #0056b3;
+  --cor-sucesso: #28a745;
+  --cor-sucesso-hover: #218838;
+  --cor-perigo: #dc3545;
+  --cor-perigo-hover: #c82333;
+  --cor-secundaria: #6c757d;
+  --cor-secundaria-hover: #5a6268;
+
+  --fonte-base: "Arial", sans-serif;
+  --tamanho-base: 16px;
+
+  /* Espaços */
+  --espaco-sm: 0.5rem;
+  --espaco-md: 1rem;
+  --espaco-lg: 1.5rem;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  font-family: var(--fonte-base);
+  font-size: var(--tamanho-base);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  width: 100%;
+  min-height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar custom (opcional) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #eee;
+}
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/*-------------------------------------------------------------
+  2) ESTRUTURA LAYOUT (header, nav, container, footer)
+--------------------------------------------------------------*/
+.painel-header {
+  background: var(--cor-header);
+  color: var(--cor-branco);
+  padding: var(--espaco-md);
+}
+.painel-header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.painel-nav {
+  background: var(--cor-menu);
+  padding: 0.6rem var(--espaco-md);
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.painel-nav a {
+  color: var(--cor-branco);
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+.painel-nav a:hover {
+  background: #666;
+}
+
+.painel-container {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: var(--espaco-md) auto;
+  padding: var(--espaco-md);
+  background: var(--cor-branco);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.painel-container h2 {
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+.painel-footer {
+  background: var(--cor-header);
+  color: var(--cor-branco);
+  text-align: center;
+  padding: var(--espaco-md);
+  margin-top: 0.5rem;
+}
+
+/*-------------------------------------------------------------
+  3) CARTÕES (CARDS) E SEÇÕES
+--------------------------------------------------------------*/
+.painel-card {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.painel-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.painel-card h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+/*-------------------------------------------------------------
+  4) TABELAS RESPONSIVAS
+--------------------------------------------------------------*/
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--espaco-sm);
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+th {
+  background: #eee;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #444;
+}
+table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Container para scroll horizontal se a tabela for grande */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: var(--espaco-md);
+}
+.table-responsive table {
+  min-width: 600px;
+}
+
+/*-------------------------------------------------------------
+  5) FORMULÁRIOS E BOTÕES
+--------------------------------------------------------------*/
+label {
+  display: block;
+  margin-top: var(--espaco-sm);
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.2s;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--cor-primaria);
+}
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0.2rem;
+  color: var(--cor-branco);
+  background: var(--cor-primaria);
+  transition: background 0.2s;
+}
+.btn:hover {
+  background: var(--cor-primaria-hover);
+}
+.btn-sm {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+}
+
+/* Variações do botão */
+.btn-primario {
+  background: var(--cor-primaria);
+}
+.btn-primario:hover {
+  background: var(--cor-primaria-hover);
+}
+.btn-sucesso {
+  background: var(--cor-sucesso);
+}
+.btn-sucesso:hover {
+  background: var(--cor-sucesso-hover);
+}
+.btn-perigo {
+  background: var(--cor-perigo);
+}
+.btn-perigo:hover {
+  background: var(--cor-perigo-hover);
+}
+.btn-secundario {
+  background: var(--cor-secundaria);
+}
+.btn-secundario:hover {
+  background: var(--cor-secundaria-hover);
+}
+
+/*-------------------------------------------------------------
+  6) ALERTAS
+--------------------------------------------------------------*/
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin: var(--espaco-md) 0;
+  font-weight: 500;
+}
+.alert-perigo {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.alert-sucesso {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/*-------------------------------------------------------------
+  7) RESPONSIVIDADE REFORÇADA
+--------------------------------------------------------------*/
+/* Telas abaixo de 768px: menu e cards empilham, tabelas rolam */
+@media (max-width: 768px) {
+  .painel-nav {
+    flex-wrap: wrap;
+  }
+  .painel-nav a {
+    margin-bottom: 0.3rem;
+  }
+  th, td {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+  .painel-card {
+    padding: var(--espaco-sm);
+  }
+  .painel-card h3 {
+    margin-bottom: 0.5rem;
+  }
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+/* Telas abaixo de 480px: reduzir ainda mais espaçamentos e fontes */
+@media (max-width: 480px) {
+  .painel-header h1 {
+    font-size: 1.1rem;
+  }
+  .painel-container {
+    padding: var(--espaco-sm);
+    margin: var(--espaco-sm);
+  }
+  .painel-container h2 {
+    font-size: 1.1rem;
+  }
+  .painel-card {
+    margin-bottom: var(--espaco-sm);
+  }
+  .painel-card h3 {
+    font-size: 1rem;
+  }
+  label {
+    margin-top: 0.3rem;
+    margin-bottom: 0.2rem;
+  }
+  th, td {
+    font-size: 0.8rem;
+  }
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+  .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+}

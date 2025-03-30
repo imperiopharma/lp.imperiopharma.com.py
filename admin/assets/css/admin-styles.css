@@ -1,0 +1,109 @@
+/* assets/css/admin-styles.css */
+@import 'design-system.css';
+@import 'components.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  background-color: var(--surface-color);
+  color: var(--color-dark);
+  overflow-x: hidden;
+}
+
+/* Layout mobile-first */
+.admin-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar responsiva */
+.admin-sidebar {
+  width: 100%;
+  background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
+  color: #ecf0f1;
+  z-index: var(--z-dropdown);
+  transition: all var(--transition-normal);
+  position: fixed;
+  height: 100%;
+  transform: translateX(-100%);
+}
+
+.sidebar-active .admin-sidebar {
+  transform: translateX(0);
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  transition: all var(--transition-normal);
+}
+
+/* Breakpoint tablet e desktop */
+@media (min-width: 992px) {
+  .admin-wrapper {
+    flex-direction: row;
+  }
+  
+  .admin-sidebar {
+    position: fixed;
+    width: 260px;
+    transform: translateX(0);
+  }
+  
+  .sidebar-collapsed .admin-sidebar {
+    width: 70px;
+  }
+  
+  .main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
+  
+  .sidebar-collapsed .main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+}
+
+/* Cabeçalho com glassmorfismo */
+.content-header {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px var(--glass-shadow);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-sm);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-above);
+}
+
+/* Cards neomórficos para estatísticas */
+.stat-card {
+  background-color: var(--element-color);
+  border-radius: var(--radius-md);
+  box-shadow: 5px 5px 10px var(--shadow-dark), 
+              -5px -5px 10px var(--shadow-light);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  transition: transform var(--transition-normal), 
+              box-shadow var(--transition-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 8px 8px 16px var(--shadow-dark), 
+              -8px -8px 16px var(--shadow-light);
+}

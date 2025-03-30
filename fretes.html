@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calculadora de Fretes - Império Pharma Store</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- CSS Principal -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Estilos Específicos para a Calculadora de Fretes -->
+  <style>
+    /* Container centralizado e responsivo */
+    .container-fretes {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .container-fretes h2 {
+      margin-bottom: 1rem;
+      color: #081c4b;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+    }
+    .container-fretes p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .container-fretes select {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+    }
+    .resultado-frete {
+      font-size: 1rem;
+      text-align: left;
+      margin-top: 1rem;
+      color: #081c4b;
+    }
+    .btn-voltar-fretes {
+      background-color: #081c4b;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-voltar-fretes:hover {
+      background-color: #051836;
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho (Mantém o padrão da loja) -->
+  <header class="header-bar">
+    <div class="header-left">
+      <img src="https://i.postimg.cc/ZKP8qkYv/logo-branca-50px.png" alt="Logo Império Pharma" class="logo-imperio">
+    </div>
+    <div id="userArea" class="header-right">
+      <!-- Conteúdo dinâmico do usuário (se necessário) -->
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content">
+    <div class="container-fretes">
+      <!-- Botão para voltar à página inicial -->
+      <button class="btn-voltar-fretes" onclick="window.location.href='index.html'">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+      </button>
+      <h2>Calculadora de Fretes</h2>
+      <p>Selecione um estado para ver os valores de frete disponíveis.</p>
+      <select id="selectEstadoFrete">
+        <option value="">-- Selecione um estado --</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AP">AP</option>
+        <option value="AM">AM</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MT">MT</option>
+        <option value="MS">MS</option>
+        <option value="MG">MG</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PR">PR</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RS">RS</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="SC">SC</option>
+        <option value="SP">SP</option>
+        <option value="SE">SE</option>
+        <option value="TO">TO</option>
+      </select>
+      <div id="resultadoFrete" class="resultado-frete">
+        <!-- Os valores dos fretes serão exibidos aqui -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer (Mantém o padrão da loja) -->
+  <footer class="footer-bar">
+    <div class="footer-button" id="btnMarcas">
+      <i class="fa-solid fa-shop"></i>
+      <span>Marcas</span>
+    </div>
+    <div class="footer-button destaque" id="btnMenuCentral" onclick="abrirMenu()">
+      <i class="fa-solid fa-bars"></i>
+      <span>Menu</span>
+    </div>
+    <div class="footer-button" id="btnCarrinho">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span>Carrinho</span>
+      <div id="cartCount" class="cart-count">0</div>
+    </div>
+  </footer>
+
+  <!-- Script para calcular e exibir os fretes -->
+  <script>
+    // Objeto com os valores de frete para cada método e estado
+    const shippingData = {
+      SEDEX: {
+        SP: 45.0, DF: 65.0, RJ: 75.0, MG: 75.0, GO: 75.0, PR: 65.0, SC: 75.0,
+        ES: 75.0, RS: 130.0, MS: 90.0, MT: 95.0, BA: 95.0, CE: 110.0, SE: 130.0,
+        PE: 120.0, AL: 130.0, PB: 130.0, RN: 130.0, PI: 130.0, MA: 130.0, PA: 110.0,
+        AP: 130.0, AM: 130.0, TO: 110.0
+      },
+      PAC: {
+        SP: 35.0, DF: 50.0, RJ: 50.0, ES: 50.0, MG: 50.0, GO: 50.0, PR: 50.0,
+        SC: 50.0, RS: 50.0, MS: 50.0, MT: 60.0, BA: 60.0, CE: 75.0, SE: 105.0,
+        AL: 115.0, PB: 105.0, RN: 105.0, PI: 105.0, AP: 105.0, TO: 95.0, PE: 95.0,
+        MA: 105.0, AM: 105.0, PA: 95.0, RO: 105.0
+      },
+      TRANSPORTADORA: {
+        SP: 53.0, RJ: 75.0, ES: 75.0, MG: 75.0, DF: 75.0, SC: 75.0, PR: 75.0,
+        RS: 105.0, SE: 90.0, AL: 90.0, BA: 85.0, PB: 105.0, CE: 85.0, PI: 115.0,
+        PA: 115.0, GO: 80.0, TO: 115.0, MS: 85.0, RN: 105.0, MA: 95.0, MT: 80.0,
+        PE: 90.0, AM: 110.0, AP: 125.0, AC: 150.0
+      }
+    };
+
+    // Função para formatar valores em BRL
+    function formatarBRL(valor) {
+      return valor.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Adiciona o listener para a seleção de estado
+    window.addEventListener('load', () => {
+      const selectEstado = document.getElementById('selectEstadoFrete');
+      if (selectEstado) {
+        selectEstado.addEventListener('change', function () {
+          const estadoSelecionado = this.value;
+          const resultadoDiv = document.getElementById('resultadoFrete');
+          if (!estadoSelecionado) {
+            resultadoDiv.innerHTML = '';
+            return;
+          }
+          let html = `<h3>Valores de Frete para ${estadoSelecionado}:</h3>`;
+          for (const metodo in shippingData) {
+            if (shippingData.hasOwnProperty(metodo)) {
+              const valor = shippingData[metodo][estadoSelecionado];
+              if (valor !== undefined) {
+                html += `<p><strong>${metodo}:</strong> R$ ${formatarBRL(valor)}</p>`;
+              } else {
+                html += `<p><strong>${metodo}:</strong> Não disponível</p>`;
+              }
+            }
+          }
+          resultadoDiv.innerHTML = html;
+        });
+      }
+    });
+  </script>
+</body>
+</html>
